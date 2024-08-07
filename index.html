@@ -4,49 +4,82 @@
 <head>
   <meta charset="utf-8">
   <title>GIF-Tastic!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Lobster&display=swap" rel="stylesheet">
   <style>
-    #addSearch,
+    
     button {
       background-color: lightseagreen;
       color: white;
+      margin-left: auto;
+      margin-right: auto;
     }
     
     body {
       background-color: lightgray;
+      background-image: url(./confetti-bg.jpg);
+      font-family: sans-serif;
     }
     
     #buttonsArea {
       margin-bottom: 10px;
+      margin-left: auto;
+      margin-right: auto;
     }
     
-    #search-form {
-      margin-bottom: 20px;
-    }
     
     .search-item {
       display: inline-block;
-      margin-right: 10px;
+      margin-right: auto;
+      margin-left: auto;
       margin-bottom: 10px;
     }
     
     .searchImage {
       cursor: pointer;
     }
+
+    .searchButton {
+      margin-left: 20px;
+      margin-right: auto;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      font-family: 'Lobster';
+      color: hotpink;
+      text-shadow: 2px;
+    }
+
+    .container {
+      width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: lightgoldenrodyellow;
+      border-radius: 10px;
+      padding: 5px;
+      border: 3px solid lightseagreen;
+    }
+
+    #searches {
+      text-align: center;
+      color: #333;
+    }
   </style>
 </head>
 
 <body>
+  <div class="container">
+  <h1>GIF-Tastic!</h1>
   <div id="buttonsArea">
-    <form id="search-form">
-      <label for="add"><h4>Add an animal here:</h4></label>
-      <input type="text" id="search-input" placeholder="Enter an animal">
-      <input type="submit" id="addSearch" value="Submit">
-    </form>
+   <!-- This is where the buttons are displayed -->
   </div>
 
-  <div id="searches"> Click on a button to get started!
+  <div id="searches"> Click on an animal button to get started!
   </div>
-
+</div>
   <script>
     const searchArray = ['Dog', 'Cat', 'Bird', 'Manatee', 'Squirrel', 'Koala', 'Butterfly', 'Horse', 'Zebra', 'Turtle', 'Giraffe', 'Dolphin', 'Fish'];
 
@@ -116,15 +149,7 @@
         }
       });
 
-      document.getElementById('addSearch').addEventListener('click', event => {
-        event.preventDefault();
-        const newSearch = document.getElementById('search-input').value.trim();
-        if (newSearch !== '') {
-          searchArray.push(newSearch);
-          populateButtons(searchArray, 'searchButton', '#buttonsArea');
-          document.getElementById('search-input').value = '';
-        }
-      });
+      
     });
   </script>
 </body>
