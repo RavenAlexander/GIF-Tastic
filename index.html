@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>GIF-Tastic!</title>
+  <style>
+    #addSearch,
+    button {
+      background-color: lightseagreen;
+      color: white;
+    }
+    
+    body {
+      background-color: lightgray;
+    }
+    
+    #buttonsArea {
+      margin-bottom: 10px;
+    }
+    
+    #search-form {
+      margin-bottom: 20px;
+    }
+    
+    .search-item {
+      display: inline-block;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .searchImage {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="buttonsArea">
+    <form id="search-form">
+      <label for="add"><h4>Add an animal here:</h4></label>
+      <input type="text" id="search-input" placeholder="Enter an animal">
+      <input type="submit" id="addSearch" value="Submit">
+    </form>
+  </div>
+
+  <div id="searches"> Click on a button to get started!
+  </div>
+
+  <script>
+    const searchArray = ['Dog', 'Cat', 'Bird', 'Manatee', 'Squirrel', 'Koala', 'Butterfly', 'Horse', 'Zebra', 'Turtle', 'Giraffe', 'Dolphin', 'Fish'];
+
+    const populateButtons = (searchArray, classToAdd, areaToAddTo) => {
+      const buttonsArea = document.querySelector(areaToAddTo);
+      buttonsArea.innerHTML = '';
+      searchArray.forEach(item => {
+        const button = document.createElement('button');
+        button.classList.add(classToAdd);
+        button.setAttribute('data-type', item);
+        button.textContent = item;
+        buttonsArea.appendChild(button);
+      });
+    }
+
+    const fetchGifs = type => {
+      const queryURL = `https://api.giphy.com/v1/gifs/search?q=${type}&api_key=hcKH7M6lUFD4tayVYejA6CQkPaycEE1U&limit=3`;
+
+      fetch(queryURL)
+        .then(response => response.json())
+        .then(data => {
+          const searches = document.getElementById('searches');
+          searches.innerHTML = '';
+          data.data.forEach(item => {
+            const searchDiv = document.createElement('div');
+            searchDiv.classList.add('search-item');
+            const rating = item.rating;
+            const p = document.createElement('p');
+            p.textContent = 'Rating: ' + rating;
+            const animated = item.images.fixed_height.url;
+            const still = item.images.fixed_height_still.url;
+            const image = document.createElement('img');
+            image.src = still;
+            image.dataset.still = still;
+            image.dataset.animated = animated;
+            image.dataset.state = 'still';
+            image.classList.add('searchImage');
+            searchDiv.appendChild(p);
+            searchDiv.appendChild(image);
+            searches.appendChild(searchDiv);
+          });
+        })
+        .catch(error => console.error('Error fetching gifs:', error));
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateButtons(searchArray, 'searchButton', '#buttonsArea');
+
+      document.addEventListener('click', event => {
+        if (event.target.matches('.searchButton')) {
+          const type = event.target.dataset.type;
+          fetchGifs(type);
+        }
+      });
+
+      document.addEventListener('click', event => {
+        if (event.target.matches('.searchImage')) {
+          const img = event.target;
+          const state = img.dataset.state;
+          if (state === 'still') {
+            img.src = img.dataset.animated;
+            img.dataset.state = 'animated';
+          } else {
+            img.src = img.dataset.still;
+            img.dataset.state = 'still';
+          }
+        }
+      });
+
+      document.getElementById('addSearch').addEventListener('click', event => {
+        event.preventDefault();
+        const newSearch = document.getElementById('search-input').value.trim();
+        if (newSearch !== '') {
+          searchArray.push(newSearch);
+          populateButtons(searchArray, 'searchButton', '#buttonsArea');
+          document.getElementById('search-input').value = '';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
